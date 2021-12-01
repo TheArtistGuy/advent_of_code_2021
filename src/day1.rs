@@ -12,7 +12,7 @@ pub fn day1(){
 fn sonar_sweep(input_string : &String) -> u32 {
     let mut input = Vec::new();
     parse_input(input_string, &mut input);
-    let result = sweep(&mut input);
+    let result = sweep(&input);
     result
 }
 
