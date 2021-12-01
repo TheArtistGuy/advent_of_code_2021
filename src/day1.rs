@@ -2,13 +2,14 @@ use std::fs;
 use std::path::Path;
 
 pub fn day1(){
-    let input1 = fs::read_to_string(Path::new("ressources/day1_input")).unwrap();
+    let input1 = fs::read_to_string(Path::new("resources/day1_input")).unwrap();
     let result1 = sonar_sweep(&input1);
     let result2 = sonar_sweep_summed(&input1);
     println!("Result day 1 part 1: {}", result1);
     println!("Result day 1 part 2: {}", result2);
 }
 
+///solution to the first part
 fn sonar_sweep(input_string : &String) -> u32 {
     let mut input = Vec::new();
     parse_input(input_string, &mut input);
@@ -16,6 +17,7 @@ fn sonar_sweep(input_string : &String) -> u32 {
     result
 }
 
+///checks how many numbers in the vector are bigger than the previous one
 fn sweep(input: &Vec<i32>) -> u32 {
     let mut result : u32 = 0;
     let mut last = &input.get(0).unwrap().clone();
@@ -28,7 +30,7 @@ fn sweep(input: &Vec<i32>) -> u32 {
     result
 }
 
-
+///solution to the second part
 fn sonar_sweep_summed(input_string: &String) -> u32 {
     let mut input = Vec::new();
     parse_input(input_string, &mut input);
@@ -37,6 +39,7 @@ fn sonar_sweep_summed(input_string: &String) -> u32 {
     result
 }
 
+///sums a object in the vector with the following 2
 fn sum_inputs(input: &mut Vec<i32>) -> Vec<i32> {
     let mut summed_inputs = Vec::new();
     for i in 0..input.len() - 2 {
@@ -61,19 +64,19 @@ mod tests {
 
     # [test]
     fn test_sonar_sweep(){
-        let input = fs::read_to_string(Path::new("ressources/day1_test_data")).expect("could not open file");
+        let input = fs::read_to_string(Path::new("resources/day1_test_data")).expect("could not open file");
         assert_eq!(sonar_sweep(&input), 7);
     }
     #[test]
     fn test_parse_input(){
-        let input = fs::read_to_string(Path::new("ressources/day1_test_data")).expect("could not open file");
+        let input = fs::read_to_string(Path::new("resources/day1_test_data")).expect("could not open file");
         let mut control_vector = Vec::new();
         parse_input(&input, &mut control_vector);
         assert_eq!(control_vector.len(), 10);
     }
     #[test]
     fn test_sonar_sweep_summed(){
-        let input = fs::read_to_string(Path::new("ressources/day1_test_data")).expect("could not open file");
+        let input = fs::read_to_string(Path::new("resources/day1_test_data")).expect("could not open file");
         assert_eq!(sonar_sweep_summed(&input), 5);
     }
 
