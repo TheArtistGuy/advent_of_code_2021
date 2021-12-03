@@ -1,4 +1,3 @@
-use std::borrow::Borrow;
 use std::fs;
 use std::path::Path;
 
@@ -63,7 +62,8 @@ fn determine_oxygen(data_int: &Vec<Vec<i32>>, length: &usize) -> i32 {
         if d.len() == 1 {break}
     }
     assert_eq!(d.len(), 1);
-    bin_to_dec_matrix(&mut d)
+    let result =  d.get(0).unwrap();
+    bin_to_dec(Box::new(result.to_owned()))
 }
 
 ///determines co2 by filtering the matrix by minimum argument
@@ -87,27 +87,19 @@ fn determine_co2(data_int: & Vec<Vec<i32>>, length: &usize) -> i32 {
         if d.len() == 1 {break};
     }
     assert_eq!(d.len(), 1);
-    bin_to_dec_matrix(&mut d)
+    let result =  d.get(0).unwrap();
+    bin_to_dec(Box::new(result.to_owned()))
 }
 
-///Converts the first input of the matrix to an decimal integer
-fn bin_to_dec_matrix(d: &mut Vec<Vec<i32>>) -> i32 {
-    let erg_bin = d.get(0).unwrap();
-    let mut erg = 0;
-    for i in 0..erg_bin.len() {
-        erg = erg + (erg_bin[i] << (erg_bin.len() - 1 - i));
-    }
-    erg
-}
 
 ///Converts vec of 0/1 to a decimal number
-fn bin_to_dec(erg_bin_in : Box<Vec<i32>>) -> i32 {
-    let erg_bin = *erg_bin_in;
-    let mut erg = 0;
-    for i in 0..erg_bin.len() {
-        erg = erg + (erg_bin[i] << (erg_bin.len() - 1 - i));
+fn bin_to_dec(res_bin_in: Box<Vec<i32>>) -> i32 {
+    let res_bin = *res_bin_in;
+    let mut result = 0;
+    for i in 0..res_bin.len() {
+        result = result + (res_bin[i] << (res_bin.len() - 1 - i));
     }
-    erg
+    result
 }
 
 
