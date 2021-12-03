@@ -73,13 +73,13 @@ fn determine_co2(data_int: & Vec<Vec<i32>>, length: &usize) -> i32 {
         let count = d.len();
         let mut det = 0;
         for x in &d { if x.get(i).unwrap() == &1 { det = det + 1 } };
-        let max = match (det as f32 / count as f32) < 0.5 {
+        let min = match (det as f32 / count as f32) < 0.5 {
             true => 1,
             _ => 0
         };
         let mut d_buffer = Vec::new();
         for x in d.into_iter() {
-            if x.get(i).unwrap() == &max {
+            if x.get(i).unwrap() == &min {
                 d_buffer.push(x.clone());
             }
         }
