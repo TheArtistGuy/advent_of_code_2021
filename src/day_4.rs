@@ -1,5 +1,4 @@
 use std::borrow::BorrowMut;
-use std::cmp::Ordering;
 use std::fs;
 use std::path::Path;
 
@@ -28,14 +27,14 @@ impl Board {
     }
 
     fn get_field(&self, col : usize, row : usize) -> Option<&Field> {
-        if col < 0 || row < 0 || col >= self.width || row >= self.height{
+        if col >= self.width || row >= self.height{
             return None;
         }
         self.vector.get(col + (self.width * row))
     }
 
     fn set_field_number(&mut self, col : usize, row : usize, value : i32) -> Result<bool, &str> {
-        if col < 0 || row < 0 || col >= self.width || row >= self.height{
+        if col >= self.width || row >= self.height{
             return Err("No Such field in World");
         }
         self.vector.remove(col + (self.width * row));
@@ -47,7 +46,7 @@ impl Board {
     }
 
     fn set_field_called(&mut self, col : usize, row : usize, value :bool) -> Result<bool, &str> {
-        if col < 0 || row < 0 || col >= self.width || row >= self.height{
+        if  col >= self.width || row >= self.height{
             return Err("No Such field in World");
         }
         let number = self.vector.get(col + (self.width * row)).unwrap().number;
@@ -99,11 +98,8 @@ fn compute_result(winning_board: Option<Board>, winning_number: i32) -> i32 {
             for field in x.vector.into_iter() {
                 if !field.called {
                     sum = sum + field.number;
-                    print!("{} ", &field.number);
                 }
             }
-            println!();
-            println!("{}", &sum);
             sum * winning_number
         },
         _ => 0
@@ -131,7 +127,7 @@ fn parse_input(data: &String) -> (Vec<i32>, Vec<Board>) {
                 assert!(!l.is_empty());
                 for val in l.split(" ").into_iter() {
                     if counter < 5 && !val.is_empty() {
-                        b.set_field_number(counter.clone(), j.clone(), val.parse().expect("could not parse, line"));
+                        b.set_field_number(counter.clone(), j.clone(), val.parse().expect("could not parse, line")).expect("could not set field");
                         counter = counter + 1;
                     }
                 }
@@ -147,7 +143,7 @@ fn call_bingo_numbers_to_last_board(numbers: &mut Vec<i32>, boards: &mut Vec<Boa
     let mut boards_to_remove = boards.len().clone();
     let mut to_remove:Vec<usize> = Vec::new();
     for x in numbers {
-        let mut b = &mut boards;
+        let b = &mut boards;
         for (i, mut board) in b.into_iter().borrow_mut().enumerate() {
             let success = check_board(&mut board, &x);
             if success {
@@ -162,7 +158,8 @@ fn call_bingo_numbers_to_last_board(numbers: &mut Vec<i32>, boards: &mut Vec<Boa
             }
         }
         if !to_remove.is_empty() {
-        to_remove.sort_by(|a,b| b.partial_cmp(a).unwrap()); //from big to small, to prevent a element isnt there
+            // remove finished boards from list
+            to_remove.sort_by(|a,b| b.partial_cmp(a).unwrap()); //sort from big to small, to prevent a element isnt there
             for i in to_remove {
             boards.remove(i);
         }
@@ -175,7 +172,7 @@ fn call_bingo_numbers_to_last_board(numbers: &mut Vec<i32>, boards: &mut Vec<Boa
 fn call_bingo_numbers(numbers: &mut Vec<i32>, boards: &mut Vec<Board>) -> (Option<Board>, i32){
     let mut boards = boards.clone();
     for x in numbers {
-        let mut b = &mut boards;
+        let b = &mut boards;
         for mut board in b.into_iter().borrow_mut() {
             let success = check_board(& mut board, &x);
             if success { return (Some(board.clone()),x.clone()) }
@@ -231,7 +228,7 @@ fn check_number_on_board(board: &mut Board, num: &i32) -> bool {
     for col in 0..board.width {
         for row in 0..board.height {
             if board.get_field(col, row).unwrap().number == *num {
-                board.set_field_called(col, row, true);
+                board.set_field_called(col, row, true).expect("could not set field");
                 return true
             }
         }
@@ -264,7 +261,7 @@ mod tests {
     fn day_4_testbingo_pres() {
         let data = fs::read_to_string(Path::new("resources/day4_testdata")).expect("could not open file");
         let (mut numbers, mut boards) = parse_input(&data);
-        let (winning_board, winning_number) = call_bingo_numbers_to_last_board(&mut numbers, &mut boards);
+        let (_winning_board, winning_number) = call_bingo_numbers_to_last_board(&mut numbers, &mut boards);
         assert_eq!(winning_number, 13);
         assert_eq!(bingo_presience(&data), 1924);
     }
