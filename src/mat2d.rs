@@ -6,15 +6,7 @@ pub struct Mat2d<T>{
 }
 
 impl<T> Mat2d<T>{
-    /**
-    fn new(width : usize, height : usize) ->Self{
-        Board{
-            vector: vec![T; (width*height) ],
-            width,
-            height
-        }
-    }
-**/
+
     pub fn from(vector : Vec<T>, width: usize, height: usize)-> Self{
         assert_eq!(vector.len(), (width * height ));
         Mat2d{
