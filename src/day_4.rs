@@ -57,16 +57,6 @@ impl Board {
         });
         Ok(true)
     }
-    fn print(&self){
-        for (i, x) in self.vector.iter().enumerate(){
-            print!("{}|{}, ", x.number, x.called);
-            if i != 0 && i % 5 == 0{
-                println!();
-            }
-        }
-        println!();
-        println!();
-    }
 
 }
 
@@ -94,7 +84,6 @@ fn compute_result(winning_board: Option<Board>, winning_number: i32) -> i32 {
     let result = match winning_board {
         Some(x) => {
             let mut sum = 0;
-            x.print();
             for field in x.vector.into_iter() {
                 if !field.called {
                     sum = sum + field.number;
@@ -148,7 +137,6 @@ fn call_bingo_numbers_to_last_board(numbers: &mut Vec<i32>, boards: &mut Vec<Boa
             let success = check_board(&mut board, &x);
             if success {
                 boards_to_remove = boards_to_remove - 1;
-                print!("b:{}", &boards_to_remove);
                 let is_last = boards_to_remove == 0;
                 if is_last {
                     return (Some(board.clone()), x.clone())
