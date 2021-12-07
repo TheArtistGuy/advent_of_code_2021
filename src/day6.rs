@@ -20,7 +20,7 @@ fn part_2(data: &String) -> u64 {
 }
 
 ///Parses the input String
-fn parse_input(input: &String) -> Vec<u8> {
+pub(crate) fn parse_input(input: &String) -> Vec<u8> {
     let mut out = Vec::new();
     for num in input.split(","){
        out.push(num.parse().expect("could not parse number"));
