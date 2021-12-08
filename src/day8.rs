@@ -27,7 +27,7 @@ fn part1(input: &String) -> i32 {
 fn part2(input: &String) -> i32 {
     let mut result = 0;
     for entry in input.lines().into_iter() {
-        let (wires, output) = split_wires_and_input(entry);
+        let (wires, output) = split_wires_and_output(entry);
         let numbers = determine_wiring_of_numbers(wires);
         let value = determine_displayed_number(output, numbers);
         result = result + value;
@@ -35,7 +35,7 @@ fn part2(input: &String) -> i32 {
     result
 }
 
-fn split_wires_and_input(entry: &str) -> (Vec<&str>, Vec<&str>) {
+fn split_wires_and_output(entry: &str) -> (Vec<&str>, Vec<&str>) {
     let temp: Vec<&str> = entry.split("|").collect();
     let wires: Vec<&str> = temp[0].split(" ").collect();
     let output: Vec<&str> = temp[1].split(" ").collect();
