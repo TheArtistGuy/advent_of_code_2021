@@ -67,10 +67,14 @@ fn determine_wiring_of_numbers(wires: Vec<&str>) -> [&str; 10] {
     }
     //round 2
     for x in wires.iter() {
-        if x.len() == 6 && !contains_all_chars(&x, &numbers[4]) && contains_all_chars(&x, &numbers[7]) { numbers[0] = x.clone() }; // Number : 0
-        if x.len() == 5 && contains_all_chars(&x, &numbers[7]) { numbers[3] = x.clone() }; //Number: 3
-        if x.len() == 6 && !contains_all_chars(&x, &numbers[7]) && !contains_all_chars(&x, &numbers[4]) { numbers[6] = x.clone() };//Number : 6
-        if x.len() == 6 && contains_all_chars(&x, &numbers[4]) { numbers[9] = x.clone() }; //Number : 9
+        if x.len() == 6 && !contains_all_chars(&x, &numbers[4]) && contains_all_chars(&x, &numbers[7])
+        { numbers[0] = x.clone() }; // Number : 0
+        if x.len() == 5 && contains_all_chars(&x, &numbers[7])
+        { numbers[3] = x.clone() }; //Number: 3
+        if x.len() == 6 && !contains_all_chars(&x, &numbers[7]) && !contains_all_chars(&x, &numbers[4])
+        { numbers[6] = x.clone() };//Number : 6
+        if x.len() == 6 && contains_all_chars(&x, &numbers[4])
+        { numbers[9] = x.clone() }; //Number : 9
     }
     // round 3 determines 2 and 5
     for x in wires.iter() {

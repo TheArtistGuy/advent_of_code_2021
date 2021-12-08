@@ -80,7 +80,7 @@ fn get_minimal(ways: &mut Vec<Way>) -> Way {
 mod test {
     use std::fs;
     use std::path::Path;
-    use crate::day7::{compute_ways, compute_ways_higher_costs, get_minimal, parse_input, Way};
+    use crate::day7::{compute_ways, compute_ways_higher_costs, get_minimal, parse_input};
 
     #[test]
     fn test_7_1() {
@@ -91,6 +91,7 @@ mod test {
         assert_eq!(optimal.position, 2);
         assert_eq!(optimal.fuel, 37);
     }
+    #[test]
     fn test_7_2() {
         let data = fs::read_to_string(Path::new("resources/day7_test_data")).expect("could not open file");
         let mut init_state: Vec<i32> = parse_input(&data);

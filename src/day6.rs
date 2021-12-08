@@ -64,7 +64,7 @@ mod test{
     #[test]
     fn test_6_1(){
         let data = fs::read_to_string(Path::new("resources/day6_test_data")).expect("could not open file");
-        let mut init_state: Vec<u8> = parse_input(&data);
+        let init_state: Vec<u8> = parse_input(&data);
         assert_eq!(init_state.len(), 5);
         let bins = sort_to_bins(&init_state);
         let last_state = advance(&bins, 80);
