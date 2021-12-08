@@ -5,6 +5,7 @@ use crate::day_4::day4;
 use crate::day5::day5;
 use crate::day6::day6;
 use crate::day7::day7;
+use crate::day8::day8;
 
 
 mod day1;
@@ -15,6 +16,7 @@ mod mat2d;
 mod day5;
 mod day6;
 mod day7;
+mod day8;
 
 fn main() {
     //day1();
@@ -23,5 +25,6 @@ fn main() {
     //day4();
     //day5();
     //day6();
-    day7();
+    //day7();
+    day8();
 }
