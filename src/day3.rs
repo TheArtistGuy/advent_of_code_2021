@@ -149,14 +149,14 @@ mod tests {
 
     #[test]
     fn test_diagnostic(){
-        let data = fs::read_to_string(Path::new("resources/day_3_test_data")).expect("could not open file");
+        let data = fs::read_to_string(Path::new("../resources/day3_test_data")).expect("could not open file");
         let (mut c, mut v)= parse_lines(&data);
         assert_eq!(determinate_gamma_and_epsilon(&mut c, &mut v), (Box::new(Vec::from([1,0,1,1,0])), Box::new(Vec::from([0,1,0,0,1]))));
         assert_eq!(diagnostic(&data), 22*9);
     }
     #[test]
     fn test_diagnostic2(){
-        let data = fs::read_to_string(Path::new("resources/day_3_test_data")).expect("could not open file");
+        let data = fs::read_to_string(Path::new("../resources/day3_test_data")).expect("could not open file");
         let mut data_int:Vec<Vec<i32>> = vec![];
         parse_to_matrix(data, &mut data_int);
         let length = data_int.get(0).unwrap().len();
@@ -164,7 +164,7 @@ mod tests {
         let co2 = determine_co2(&data_int, &length);
         assert_eq!(ox, 23);
         assert_eq!(co2, 10);
-        let data = fs::read_to_string(Path::new("resources/day_3_test_data")).expect("could not open file");
+        let data = fs::read_to_string(Path::new("../resources/day3_test_data")).expect("could not open file");
         assert_eq!(diag_2(data), 230);
         }
 

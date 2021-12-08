@@ -197,7 +197,7 @@ mod test{
 
     #[test]
     fn test_day5_1(){
-        let data = fs::read_to_string(Path::new("resources/day5_test_input")).expect("could not open file");
+        let data = fs::read_to_string(Path::new("../resources/day5_test_data")).expect("could not open file");
         let lines :Vec<Line> = parse_input(&data);
         assert_eq!(lines.len(), 10);
         let mat : Mat2d<i32> = draw_ways_to_matrix(&lines, false);
@@ -220,7 +220,7 @@ mod test{
 
     #[test]
     fn test_day5_2(){
-        let data = fs::read_to_string(Path::new("resources/day5_test_input")).expect("could not open file");
+        let data = fs::read_to_string(Path::new("../resources/day5_test_data")).expect("could not open file");
         let lines :Vec<Line> = parse_input(&data);
         let matrix = draw_ways_to_matrix(&lines, true);
         draw_matrix(&matrix);

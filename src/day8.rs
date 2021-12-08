@@ -109,13 +109,13 @@ mod tests {
 
     #[test]
     fn test_8_1(){
-        let data = fs::read_to_string(Path::new("resources/day8_testdata")).expect("could not open file");
+        let data = fs::read_to_string(Path::new("../resources/day8_test_data")).expect("could not open file");
         let result : i32 = part1(&data);
         assert_eq!(result, 26);
     }
     #[test]
     fn test_8_2(){
-        let data = fs::read_to_string(Path::new("resources/day8_testdata")).expect("could not open file");
+        let data = fs::read_to_string(Path::new("../resources/day8_test_data")).expect("could not open file");
         let result : i32 = part2(&data);
         let a = "asd";
         let b = "as";
