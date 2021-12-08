@@ -2,7 +2,7 @@ use std::fs;
 use std::path::Path;
 
 pub fn day1(){
-    let input1 = fs::read_to_string(Path::new("../resources/day1_data")).unwrap();
+    let input1 = fs::read_to_string(Path::new("resources/day1_data")).unwrap();
     let result1 = sonar_sweep(&input1);
     let result2 = sonar_sweep_summed(&input1);
     println!("Result day 1 part 1: {}", result1);

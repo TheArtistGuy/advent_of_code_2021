@@ -84,7 +84,7 @@ mod test {
 
     #[test]
     fn test_7_1() {
-        let data = fs::read_to_string(Path::new("../resources/day7_test_data")).expect("could not open file");
+        let data = fs::read_to_string(Path::new("resources/day7_test_data")).expect("could not open file");
         let mut init_state: Vec<i32> = parse_input(&data);
         let mut ways = compute_ways(&mut init_state);
         let optimal = get_minimal(&mut ways);
@@ -92,7 +92,7 @@ mod test {
         assert_eq!(optimal.fuel, 37);
     }
     fn test_7_2() {
-        let data = fs::read_to_string(Path::new("../resources/day7_test_data")).expect("could not open file");
+        let data = fs::read_to_string(Path::new("resources/day7_test_data")).expect("could not open file");
         let mut init_state: Vec<i32> = parse_input(&data);
         let mut ways = compute_ways_higher_costs(&mut init_state);
         let optimal = get_minimal(&mut ways);

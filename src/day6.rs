@@ -7,13 +7,13 @@ pub fn day6(){
     println!("day 6 , 2 : {}", part_2(&data));
 }
 fn part_1(data: &String) -> u64 {
-    let mut init_state: Vec<u8> = parse_input(&data);
+    let init_state: Vec<u8> = parse_input(&data);
     let bins = sort_to_bins(&init_state);
     let last_state = advance(&bins, 80);
     count_fish_in_bins(&last_state)
 }
 fn part_2(data: &String) -> u64 {
-    let mut init_state: Vec<u8> = parse_input(&data);
+    let init_state: Vec<u8> = parse_input(&data);
     let bins = sort_to_bins(&init_state);
     let last_state = advance(&bins, 256);
     count_fish_in_bins(&last_state)

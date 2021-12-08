@@ -233,7 +233,7 @@ mod tests {
 
     #[test]
     fn day_4_testbingo() {
-        let data = fs::read_to_string(Path::new("../resources/day4_test_data")).expect("could not open file");
+        let data = fs::read_to_string(Path::new("resources/day4_test_data")).expect("could not open file");
         let (mut numbers, mut boards) = parse_input(&data);
         assert_eq!(boards.len(), 3);
         assert_eq!(numbers.len(), 27);
@@ -247,7 +247,7 @@ mod tests {
 
     #[test]
     fn day_4_testbingo_pres() {
-        let data = fs::read_to_string(Path::new("../resources/day4_test_data")).expect("could not open file");
+        let data = fs::read_to_string(Path::new("resources/day4_test_data")).expect("could not open file");
         let (mut numbers, mut boards) = parse_input(&data);
         let (_winning_board, winning_number) = call_bingo_numbers_to_last_board(&mut numbers, &mut boards);
         assert_eq!(winning_number, 13);

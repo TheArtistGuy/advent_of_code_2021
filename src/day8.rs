@@ -11,7 +11,7 @@ fn part1(input: &String) -> i32 {
     let mut result = 0;
     for entry in input.lines().into_iter() {
         let temp : Vec<&str>=  entry.split("|").collect();
-        let wires = temp[0];
+        let _wires = temp[0];
         let output = temp[1];
         for x in output.split(" "){
             if x.len() == 2 {result = result +1}; // Number : 1
@@ -109,13 +109,13 @@ mod tests {
 
     #[test]
     fn test_8_1(){
-        let data = fs::read_to_string(Path::new("../resources/day8_test_data")).expect("could not open file");
+        let data = fs::read_to_string(Path::new("resources/day8_test_data")).expect("could not open file");
         let result : i32 = part1(&data);
         assert_eq!(result, 26);
     }
     #[test]
     fn test_8_2(){
-        let data = fs::read_to_string(Path::new("../resources/day8_test_data")).expect("could not open file");
+        let data = fs::read_to_string(Path::new("resources/day8_test_data")).expect("could not open file");
         let result : i32 = part2(&data);
         let a = "asd";
         let b = "as";

@@ -2,7 +2,7 @@ use std::fs;
 use std::path::Path;
 
 pub fn day2(){
-    let data = fs::read_to_string(Path::new("../resources/day2_data")).expect("could not open file");
+    let data = fs::read_to_string(Path::new("resources/day2_data")).expect("could not open file");
     compute_and_print_part1(&data);
     compute_and_print_part2(&data);
 }
