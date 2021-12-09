@@ -23,6 +23,13 @@ impl<T> Mat2d<T>{
         self.vector.get(col + (self.width * row))
     }
 
+    pub fn get_field_i32(&self, col : i32, row : i32) -> Option<&T> {
+        if col<0 || row<0 || col as usize>= self.width || row as usize >= self.height{
+            return None;
+        }
+        self.vector.get(col as usize+ (self.width * row as usize))
+    }
+
     pub fn set_field(&mut self, col : usize, row : usize, value : T) -> Result<bool, &str> {
         if col >= self.width || row >= self.height{
             return Err("Not in matrix");
