@@ -44,7 +44,7 @@ fn create_heat_map(mat: &Mat2d<i32>) -> i32 {
     let mut heat = 0;
     for x in 0..mat.width{
         for y in 0..mat.height{
-            let number = mat.get_field(x,y).unwrap();
+            let number = mat.get_value(x, y).unwrap();
             if  is_lower_than_all_neighbours(mat, &number, x as i32, y as i32){
                 heat = heat + 1 + number;
             }
@@ -55,10 +55,10 @@ fn create_heat_map(mat: &Mat2d<i32>) -> i32 {
 }
 
 fn is_lower_than_all_neighbours(mat :&Mat2d<i32>, number : &i32, ix : i32, iy : i32) -> bool{
-    is_lower(number, mat.get_field_i32(ix-1,iy))
-        &&is_lower(number, mat.get_field_i32(ix+1, iy))
-        &&is_lower(number, mat.get_field_i32(ix, iy+1))
-        &&is_lower(number, mat.get_field_i32(ix, iy-1))
+    is_lower(number, mat.get_value_in_position_of_i32(ix-1, iy))
+        &&is_lower(number, mat.get_value_in_position_of_i32(ix+1, iy))
+        &&is_lower(number, mat.get_value_in_position_of_i32(ix, iy+1))
+        &&is_lower(number, mat.get_value_in_position_of_i32(ix, iy-1))
 }
 
 fn is_lower(num: &i32, neighbour: Option<&i32>) -> bool {
@@ -82,7 +82,7 @@ fn find_basins(mat: &Mat2d<i32>) -> i32 {
 
     for x in 0..mat.width{
         for y in 0..mat.height{
-            if mat.get_field(x,y).unwrap() < &9 && found_map.get_field(x, y).unwrap() == &false{
+            if mat.get_value(x, y).unwrap() < &9 && found_map.get_value(x, y).unwrap() == &false{
                 let mut basin = vec![];
                 scan_basin(mat, &mut found_map, x, y, &mut basin);
                 basins.push(basin);
@@ -96,9 +96,9 @@ fn find_basins(mat: &Mat2d<i32>) -> i32 {
 }
 
 fn scan_basin(mat: &Mat2d<i32>, found_map: &mut Mat2d<bool>, x: usize, y: usize, basin: &mut Vec<i32>) {
-    if mat.get_field(x,y).unwrap() < &9 && found_map.get_field(x, y).unwrap() == &false {
-        found_map.set_field(x, y, true);
-        basin.push(mat.get_field(x,y).unwrap().clone());
+    if mat.get_value(x, y).unwrap() < &9 && found_map.get_value(x, y).unwrap() == &false {
+        found_map.set_value(x, y, true);
+        basin.push(mat.get_value(x, y).unwrap().clone());
         let ix = x as i32;
         let iy = y as i32;
         try_neighbor(mat, found_map, basin, ix-1, iy);
@@ -109,7 +109,7 @@ fn scan_basin(mat: &Mat2d<i32>, found_map: &mut Mat2d<bool>, x: usize, y: usize,
 }
 
 fn try_neighbor(mat: &Mat2d<i32>, found_map: &mut Mat2d<bool>, basin: &mut Vec<i32>, ix: i32, iy: i32) {
-    match mat.get_field_i32(ix, iy) {
+    match mat.get_value_in_position_of_i32(ix, iy) {
         None => {}
         Some(val) => {
             scan_basin(mat, found_map, ix as usize, iy as usize, basin);

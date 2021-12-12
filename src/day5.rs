@@ -80,8 +80,8 @@ fn draw_diagonal_line(matrix: &mut Mat2d<i32>, line: &&Line) {
 
 fn draw_line_to_top_right(matrix: &mut Mat2d<i32>, x_end: i32, y_end: i32, mut x: i32, mut y: i32) {
     while x_end + 1 != x  && y_end +1  != y{
-        matrix.set_field(x as usize, y as usize,
-                         matrix.get_field(x as usize, y as usize).unwrap() + 1)
+        matrix.set_value(x as usize, y as usize,
+                         matrix.get_value(x as usize, y as usize).unwrap() + 1)
             .expect("could not set field");
         x = x + 1;
         y = y + 1;
@@ -90,8 +90,8 @@ fn draw_line_to_top_right(matrix: &mut Mat2d<i32>, x_end: i32, y_end: i32, mut x
 
 fn draw_line_to_top_left(matrix: &mut Mat2d<i32>, x_end: i32, y_end: i32, mut x: i32, mut y: i32) {
     while x_end  != x +1 && y_end +1  != y {
-        matrix.set_field(x as usize, y as usize,
-                         matrix.get_field(x as usize, y as usize).unwrap() + 1)
+        matrix.set_value(x as usize, y as usize,
+                         matrix.get_value(x as usize, y as usize).unwrap() + 1)
             .expect("could not set field");
         x = x - 1;
         y = y + 1;
@@ -119,16 +119,16 @@ fn draw_horizontal_line(mat: &mut Mat2d<i32>, line: &&Line) {
 
 fn draw_line_from_top_to_bottom(mat: &mut Mat2d<i32>, line: &&Line) {
     for i in (line.y2 as usize)..((line.y1 + 1) as usize) {
-        mat.set_field(line.x1 as usize, i,
-                      *mat.get_field(line.x1 as usize, i).unwrap() + 1)
+        mat.set_value(line.x1 as usize, i,
+                      *mat.get_value(line.x1 as usize, i).unwrap() + 1)
             .expect("could not set field");
     }
 }
 
 fn draw_line_from_bottom_to_top(mat: &mut Mat2d<i32>, line: &&Line) {
     for i in (line.y1 as usize)..((line.y2 + 1) as usize) {
-        mat.set_field(line.x1 as usize, i,
-                      *mat.get_field(line.x1 as usize, i).unwrap() + 1)
+        mat.set_value(line.x1 as usize, i,
+                      *mat.get_value(line.x1 as usize, i).unwrap() + 1)
             .expect("could not set field");
     }
 }
@@ -143,16 +143,16 @@ fn draw_vertical_line(mat: &mut Mat2d<i32>, line: &&Line) {
 
 fn draw_line_from_right_to_left(mat: &mut Mat2d<i32>, line: &&Line) {
     for i in (line.x2 as usize)..((line.x1 + 1) as usize) {
-        mat.set_field(i, line.y1 as usize,
-                      *mat.get_field(i, line.y1 as usize).unwrap() + 1)
+        mat.set_value(i, line.y1 as usize,
+                      *mat.get_value(i, line.y1 as usize).unwrap() + 1)
             .expect("could not set field");
     }
 }
 
 fn draw_line_from_left_to_right(mat: &mut Mat2d<i32>, line: &&Line) {
     for i in (line.x1 as usize)..((line.x2 + 1) as usize) {
-        mat.set_field(i, line.y1 as usize,
-                      *mat.get_field(i, line.y1 as usize).unwrap() + 1)
+        mat.set_value(i, line.y1 as usize,
+                      *mat.get_value(i, line.y1 as usize).unwrap() + 1)
             .expect("could not set field");
     }
 }
@@ -204,7 +204,7 @@ mod test{
         draw_matrix(&mat);
         assert_eq!(mat.height, 10);
         assert_eq!(mat.width, 10);
-        assert_eq!(mat.get_field(0,9).unwrap(), &2);
+        assert_eq!(mat.get_value(0, 9).unwrap(), &2);
         let result:i32 = count_overlap(&mat);
         assert_eq!(result, 5);
     }
@@ -212,7 +212,7 @@ mod test{
     fn draw_matrix(mat: &Mat2d<i32>) {
         for i in 0..mat.width {
             for j in 0..mat.height {
-                print!("{} ", &mat.get_field(i, j).unwrap());
+                print!("{} ", &mat.get_value(i, j).unwrap());
             }
             println!()
         }
