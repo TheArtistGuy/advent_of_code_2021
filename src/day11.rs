@@ -24,13 +24,8 @@ fn find_synchronized_event(world: &mut Mat2d<i32>) -> i32{
         increase_by_one(world);
 
         handle_flashes(world, &mut has_flashed);
-        for x in 0..world.width{
-            for y in 0..world.height{
-                if world.get_value(x,y).unwrap() > &9{
-                    world.set_value(x,y, 0).expect("");
-                }
-            }
-        }
+
+        set_flashed_to_zero(world);
         let mut found = true;
         for b in has_flashed.vector.iter(){
             if !*b{
@@ -51,20 +46,24 @@ fn advance_to_generation_and_count_flashes(world: &mut Mat2d<i32>, generations: 
         };
 
         increase_by_one(world);
-
         handle_flashes(world, &mut has_flashed);
-        for x in 0..world.width{
-            for y in 0..world.height{
-                if world.get_value(x,y).unwrap() > &9{
-                    world.set_value(x,y, 0).expect("");
-                }
-            }
-        }
+        set_flashed_to_zero(world);
+
         let new_flashes : i32= has_flashed.vector.iter().map(|x| if *x == true{1} else{0}).sum();
         flashes = flashes + new_flashes;
 
     }
     flashes
+}
+
+fn set_flashed_to_zero(world: &mut Mat2d<i32>) {
+    for x in 0..world.width {
+        for y in 0..world.height {
+            if world.get_value(x, y).unwrap() > &9 {
+                world.set_value(x, y, 0).expect("");
+            }
+        }
+    }
 }
 
 fn handle_flashes(world: &mut Mat2d<i32>, mut has_flashed: &mut Mat2d<bool>) {
