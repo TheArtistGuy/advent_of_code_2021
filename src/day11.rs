@@ -10,7 +10,6 @@ pub(crate) fn day11(){
     println!("day 11 , 2 : {}", &part2);
 }
 
-
 fn find_synchronized_event(world: &mut Mat2d<i32>) -> i32{
     let mut counter = 0;
     loop {
@@ -20,11 +19,8 @@ fn find_synchronized_event(world: &mut Mat2d<i32>) -> i32{
             width: world.width,
             vector: vec![false; world.width * world.height]
         };
-
         increase_by_one(world);
-
         handle_flashes(world, &mut has_flashed);
-
         set_flashed_to_zero(world);
         let mut found = true;
         for b in has_flashed.vector.iter(){
