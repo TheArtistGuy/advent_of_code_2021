@@ -19,6 +19,7 @@ fn part2(data :&str){
     let data = data.to_string();
     let (mat, instructions) = parse_input(&data);
     let mat = process_instructions(mat, &instructions);
+    println!("Day 13 , 2 : ");
     print_mat(&mat);
 }
 
@@ -84,18 +85,12 @@ fn determine_max_positions(positions: &mut Vec<(i32, i32)>) -> (usize, usize) {
 
 fn process_instructions(matrix: Mat2d<bool>, instructions: &Vec<(String, usize)>) -> Mat2d<bool> {
     let mut mat = matrix;
-    //print_mat(&mat);
     for (instruction, position) in instructions.into_iter(){
-        //println!("{}, {}", &instruction, position);
         if instruction.eq("x"){
             let (left, right) = mat.split_vertical(*position).unwrap();
             let (_, right) = right.split_vertical(1).unwrap();
             let right = right.vertical_inverted_copy();
-            //println!("mat :" );
-            //print_mat(&left);
-            //println!("inverted");
-            //print_mat(&right);
-            //println!();
+
             if right.get_width() < left.get_width(){
                 mat = fold_to_bigger(right, left);
             } else {
@@ -105,19 +100,12 @@ fn process_instructions(matrix: Mat2d<bool>, instructions: &Vec<(String, usize)>
             let  (top, bottom) = mat.split_horizontal(*position).unwrap();
             let (_, bottom) = bottom.split_horizontal(1).unwrap();
             let bottom = bottom.horizontal_inverted_copy();
-            //println!("mat");
-            //print_mat(&top);
-            //println!("inverted");
-            //print_mat(&bottom);
-            //println!();
             if bottom.get_height() < top.get_height(){
                 mat  = fold_to_bigger(bottom, top);
             } else{
                 mat = fold_to_bigger(top, bottom);
             }
         }
-        //print_mat(&mat);
-        println!();
     }
     mat
 }
