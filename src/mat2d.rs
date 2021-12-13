@@ -1,6 +1,6 @@
 use std::ops::Deref;
 
-///A Datastruture for a 2 dimensional Matrix
+///A Datastructure for a 2 dimensional Matrix
 ///
 /// Cloneable
 #[derive(Clone)]
@@ -10,9 +10,10 @@ pub struct Mat2d<T> where T:Clone{
     pub vector : Vec<T>
 }
 
+
 impl<T> Mat2d<T> where T:Clone{
-    ///converts a vector of size (width * heigth) into a Matrix with
-    /// width colums and height rows
+    ///converts a vector of size (width * height) into a Matrix with
+    /// width columns and height rows
     pub fn from(vector : Vec<T>, width: usize, height: usize) -> Self{
         assert_eq!(vector.len(), (width * height ));
         Mat2d{
@@ -28,26 +29,37 @@ impl<T> Mat2d<T> where T:Clone{
     pub fn get_height(&self) -> usize{
         self.height
     }
-    pub fn get_vector(&self) -> &Vec<T>{
+    pub fn get_as_vector(&self) -> &Vec<T>{
         &self.vector
     }
 
-    pub fn set_vector_to(&mut self, vector : Vec<T>){
+    ///Sets all Values to those in the Vector. It's size has to be width * height
+    ///
+    /// #Examples
+    ///
+    /// let mut mat: Mat2d<i32> = Mat2d::from(
+    ///             vec!\[1,1,1,2,2,2,3,3,3\],
+    ///             3,3);
+    ///
+    ///  let mat_2 = vec!\[2,2,2,4,4,4,6,6,6\];
+    ///  mat.set_to_vector(mat_2);
+    ///  assert_eq!(*mat.get_value(0,0).unwrap(), 2);
+    ///  assert_eq!(*mat.get_value(2,2).unwrap(), 6);
+
+    pub fn set_to_vector(&mut self, vector : Vec<T>){
         assert_eq!(vector.len(), (self.width * self.height));
         self.vector = vector;
     }
 
     /// resizes the Dimensions of the Matrix.
-    /// self.height*self.width has to be the same as width*height
-    ///
-    ///
+    /// self.height * self.width has to be the same as width * height
     pub fn resize(&mut self, width : usize, height : usize){
         assert_eq!((self.height*self.width), width*height);
         self.width = width;
         self.height = height;
     }
 
-    ///Creates an Empty Matrix of size 0x0
+    ///Creates an Empty Matrix of size 0x0. If you need a default value.
     pub fn empty() -> Self{
         Mat2d {
             height: 0,
@@ -74,7 +86,7 @@ impl<T> Mat2d<T> where T:Clone{
         self.vector.get(col as usize+ (self.width * row as usize))
     }
 
-    ///Sets the value in the especified position to value
+    ///Sets the value in the specified position to value
     pub fn set_value(&mut self, col : usize, row : usize, value : T) -> Result<bool, &str> {
         if col >= self.width || row >= self.height {
             return Err("Not in matrix");
@@ -174,6 +186,44 @@ impl<T> Mat2d<T> where T:Clone{
         ).unwrap();
         Some((top, bottom))
     }
+    ///#Examples
+    ///
+    /// let mut mat: Mat2d<i32> = Mat2d::from(
+    ///             vec!\[1,2,3,4,5,6,7,8,9\],
+    ///             3,3);
+    ///
+    /// let inverted = mat.vertical_inverted_copy();
+    /// assert_eq!(*inverted.get_value(0,0,).unwrap(), 3);
+    /// assert_eq!(*inverted.get_value(1,0,).unwrap(), 2);
+    /// assert_eq!(*inverted.get_value(2,0,).unwrap(), 1);
+    /// assert_eq!(*inverted.get_value(0,1,).unwrap(), 6);
+    /// assert_eq!(*inverted.get_value(1,1,).unwrap(), 5);
+    /// assert_eq!(*inverted.get_value(2,1,).unwrap(), 4);
+    /// assert_eq!(*inverted.get_value(0,2,).unwrap(), 9);
+    /// assert_eq!(*inverted.get_value(1,2,).unwrap(), 8);
+    /// assert_eq!(*inverted.get_value(2,2,).unwrap(), 7);
+    pub fn vertical_inverted_copy(&self) -> Mat2d<T>{
+        let mut vector = Vec::new();
+        for row in 0..self.height{
+            for col in 0..self.width{
+                        let col_inverted = (self.width as i32 - (col as i32 +1)) as usize;
+                        let value = (self.vector[col_inverted + (self.width * row)]).clone();
+                        vector.push(value);
+            }
+        }
+        Mat2d::from(vector, self.width, self.height)
+    }
+    pub fn horizontal_inverted_copy(&self) -> Mat2d<T>{
+        let mut vector = Vec::new();
+        for row in 0..self.height{
+            let row_inverted = (self.height as i32 - (row as i32 +1)) as usize;
+            for col in 0..self.width{
+                let value = (self.vector[col + (self.width * row_inverted)]).clone();
+                vector.push(value);
+            }
+        }
+        Mat2d::from(vector, self.width, self.height)
+    }
 }
 
 #[cfg(test)]
@@ -239,6 +289,51 @@ mod test{
         assert_eq!(s2.get_height() ,2);
         assert_eq!(s1.get_width(), 3);
         assert_eq!(s2.get_width(), 3);
+    }
+
+    #[test]
+    fn test_set_vec(){
+        let mut mat: Mat2d<i32> = Mat2d::from(
+            vec![1,1,1,2,2,2,3,3,3],
+            3,3);
+        let mat_2 = vec![2,2,2,4,4,4,6,6,6];
+        mat.set_to_vector(mat_2);
+        assert_eq!(*mat.get_value(0,0).unwrap(), 2);
+        assert_eq!(*mat.get_value(2,2).unwrap(), 6);
+    }
+
+    #[test]
+    fn test_invert_vertical(){
+        let mut mat: Mat2d<i32> = Mat2d::from(
+            vec![1,2,3,4,5,6,7,8,9],
+            3,3);
+        let inverted = mat.vertical_inverted_copy();
+        assert_eq!(*inverted.get_value(0,0,).unwrap(), 3);
+        assert_eq!(*inverted.get_value(1,0,).unwrap(), 2);
+        assert_eq!(*inverted.get_value(2,0,).unwrap(), 1);
+        assert_eq!(*inverted.get_value(0,1,).unwrap(), 6);
+        assert_eq!(*inverted.get_value(1,1,).unwrap(), 5);
+        assert_eq!(*inverted.get_value(2,1,).unwrap(), 4);
+        assert_eq!(*inverted.get_value(0,2,).unwrap(), 9);
+        assert_eq!(*inverted.get_value(1,2,).unwrap(), 8);
+        assert_eq!(*inverted.get_value(2,2,).unwrap(), 7);
+    }
+
+    #[test]
+    fn test_invert_horizontal(){
+        let mut mat: Mat2d<i32> = Mat2d::from(
+            vec![1,2,3,4,5,6,7,8,9],
+            3,3);
+        let inverted = mat.horizontal_inverted_copy();
+        assert_eq!(*inverted.get_value(0,0,).unwrap(), 7);
+        assert_eq!(*inverted.get_value(1,0,).unwrap(), 8);
+        assert_eq!(*inverted.get_value(2,0,).unwrap(), 9);
+        assert_eq!(*inverted.get_value(0,1,).unwrap(), 4);
+        assert_eq!(*inverted.get_value(1,1,).unwrap(), 5);
+        assert_eq!(*inverted.get_value(2,1,).unwrap(), 6);
+        assert_eq!(*inverted.get_value(0,2,).unwrap(), 1);
+        assert_eq!(*inverted.get_value(1,2,).unwrap(), 2);
+        assert_eq!(*inverted.get_value(2,2,).unwrap(), 3);
     }
 
 }

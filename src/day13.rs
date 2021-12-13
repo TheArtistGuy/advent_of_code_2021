@@ -1,4 +1,27 @@
+use std::fs;
+use std::path::Path;
 use crate::mat2d::Mat2d;
+
+pub(crate) fn day13(){
+    let data = fs::read_to_string(Path::new("resources/day13_data")).expect("");
+    println!("day 13 , 1 : {}", part1(&data));
+    part2(&data);
+}
+
+fn part1(data :&str) -> i32 {
+    let data = data.to_string();
+    let (mat, instructions) = parse_input(&data);
+    let mat = process_instructions(mat, &instructions[..1].to_vec());
+    let points :i32 = mat.get_as_vector().into_iter().map(|x|if x == &true{1} else {0}).sum();
+    points
+}
+fn part2(data :&str){
+    let data = data.to_string();
+    let (mat, instructions) = parse_input(&data);
+    let mat = process_instructions(mat, &instructions);
+    print_mat(&mat);
+}
+
 
 fn parse_input(data: &String) ->  (Mat2d<bool>, Vec<(String, usize)>){
     let mut instructions = Vec::new();
@@ -36,9 +59,9 @@ fn initialize_matrix(mut positions: &mut Vec<(i32, i32)>) -> Mat2d<bool> {
     let (max_x, max_y) = determine_max_positions(&mut positions);
 
     let mut  mat = Mat2d {
-        height: max_y as usize,
-        width: max_x as usize,
-        vector: vec![false; (max_x * max_y) as usize]
+        height: max_y,
+        width: max_x,
+        vector: vec![false; max_x * max_y]
     };
 
     for (x, y) in positions.iter() {
@@ -48,7 +71,7 @@ fn initialize_matrix(mut positions: &mut Vec<(i32, i32)>) -> Mat2d<bool> {
 
 }
 
-fn determine_max_positions(positions: &mut Vec<(i32, i32)>) -> (i32, i32) {
+fn determine_max_positions(positions: &mut Vec<(i32, i32)>) -> (usize, usize) {
     let mut max_x = 0;
     let mut max_y = 0;
 
@@ -56,19 +79,90 @@ fn determine_max_positions(positions: &mut Vec<(i32, i32)>) -> (i32, i32) {
         if max_x < *x { max_x = x.clone() }
         if max_y < *y { max_y = y.clone() }
     }
-    (max_x, max_y)
+    ((max_x +1)as usize, (max_y +1)as usize)
 }
 
+fn process_instructions(matrix: Mat2d<bool>, instructions: &Vec<(String, usize)>) -> Mat2d<bool> {
+    let mut mat = matrix;
+    //print_mat(&mat);
+    for (instruction, position) in instructions.into_iter(){
+        //println!("{}, {}", &instruction, position);
+        if instruction.eq("x"){
+            let (left, right) = mat.split_vertical(*position).unwrap();
+            let (_, right) = right.split_vertical(1).unwrap();
+            let right = right.vertical_inverted_copy();
+            //println!("mat :" );
+            //print_mat(&left);
+            //println!("inverted");
+            //print_mat(&right);
+            //println!();
+            if right.get_width() < left.get_width(){
+                mat = fold_to_bigger(right, left);
+            } else {
+                mat = fold_to_bigger(left, right);
+            }
+        } else if instruction.eq("y"){
+            let  (top, bottom) = mat.split_horizontal(*position).unwrap();
+            let (_, bottom) = bottom.split_horizontal(1).unwrap();
+            let bottom = bottom.horizontal_inverted_copy();
+            //println!("mat");
+            //print_mat(&top);
+            //println!("inverted");
+            //print_mat(&bottom);
+            //println!();
+            if bottom.get_height() < top.get_height(){
+                mat  = fold_to_bigger(bottom, top);
+            } else{
+                mat = fold_to_bigger(top, bottom);
+            }
+        }
+        //print_mat(&mat);
+        println!();
+    }
+    mat
+}
 
+fn fold_to_bigger(smaller: Mat2d<bool>, mut bigger: Mat2d<bool>) -> Mat2d<bool> {
+    for row in 0..smaller.get_height() {
+        for col in 0..smaller.get_width() {
+            let t = bigger.get_value(col, row).unwrap() == &true|| smaller.get_value(col, row).unwrap() == &true;
+            if t {
+                bigger.set_value(col, row, true);
+            }
+        }
+    }
+    bigger
+}
+
+fn print_mat(mat : &Mat2d<bool>){
+    for y in 0..mat.get_height(){
+        for x in 0..mat.get_width(){
+            let val = if mat.get_value(x,y).unwrap() == &true{'#'} else {'.'};
+            print!("{} ", val);
+        }
+        println!();
+    }
+}
 #[cfg(test)]
 mod test{
     use std::fs;
-    use crate::day13::parse_input;
+    use std::fs::metadata;
+    use crate::day13::{parse_input, print_mat, process_instructions};
+    use crate::mat2d::Mat2d;
 
     #[test]
     fn test_day13_1(){
         let data = fs::read_to_string("resources/day_13_testdata").expect("could not open file");
         let (mat, instructions) = parse_input(&data);
+        assert_eq!(mat.get_height(), 15);
+        assert_eq!(mat.get_width(), 11);
+        let mat = process_instructions(mat, &instructions[..1].to_vec());
+        let points :i32 = mat.get_as_vector().into_iter().map(|x|if x == &true {1} else {0}).sum();
+        print_mat(&mat);
+        //assert_eq!(mat.get_height(), 7);
+        //assert_eq!(mat.get_width(), 5);
+        println!("{}", &points);
+        assert_eq!(points, 17);
     }
 
 }
