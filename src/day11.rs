@@ -81,7 +81,7 @@ fn increase_by_one(world: &mut Mat2d<i32>) {
 fn handle_flash(mut world: &mut Mat2d<i32>, has_flashed: &mut Mat2d<bool>, x: usize, y: usize) {
     if has_flashed.get_value(x, y) == Some(&false)
         && *world.get_value(x, y).unwrap() > 9 {
-        has_flashed.set_value(x, y, true);
+        has_flashed.set_value(x, y, true).expect("");
         if x + 1 < world.width {
             flash_neighbor(world, has_flashed, x + 1, y);
             if y + 1 < world.height {flash_neighbor(world, has_flashed, x + 1, y +1);}

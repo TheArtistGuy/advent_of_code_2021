@@ -66,7 +66,7 @@ fn initialize_matrix(mut positions: &mut Vec<(i32, i32)>) -> Mat2d<bool> {
     };
 
     for (x, y) in positions.iter() {
-        mat.set_value(*x as usize, *y as usize, true);
+        mat.set_value(*x as usize, *y as usize, true).expect("");
     }
     mat
 
@@ -87,9 +87,7 @@ fn process_instructions(matrix: Mat2d<bool>, instructions: &Vec<(String, usize)>
     let mut mat = matrix;
     for (instruction, position) in instructions.into_iter(){
         if instruction.eq("x"){
-            let (left, right) = mat.split_vertical(*position).unwrap();
-            let (_, right) = right.split_vertical(1).unwrap();
-            let right = right.vertical_inverted_copy();
+            let (left, right) = vertical_split(&mut mat, position);
 
             if right.get_width() < left.get_width(){
                 mat = fold_to_bigger(right, left);
@@ -97,9 +95,7 @@ fn process_instructions(matrix: Mat2d<bool>, instructions: &Vec<(String, usize)>
                 mat = fold_to_bigger(left, right);
             }
         } else if instruction.eq("y"){
-            let  (top, bottom) = mat.split_horizontal(*position).unwrap();
-            let (_, bottom) = bottom.split_horizontal(1).unwrap();
-            let bottom = bottom.horizontal_inverted_copy();
+            let (top, bottom) = horizontal_split(&mut mat, position);
             if bottom.get_height() < top.get_height(){
                 mat  = fold_to_bigger(bottom, top);
             } else{
@@ -110,12 +106,26 @@ fn process_instructions(matrix: Mat2d<bool>, instructions: &Vec<(String, usize)>
     mat
 }
 
+fn horizontal_split(mat: &mut Mat2d<bool>, position: &usize) -> (Mat2d<bool>, Mat2d<bool>) {
+    let (top, bottom) = mat.split_horizontal(*position).unwrap();
+    let (_, bottom) = bottom.split_horizontal(1).unwrap();
+    let bottom = bottom.horizontal_inverted_copy();
+    (top, bottom)
+}
+
+fn vertical_split(mat: &mut Mat2d<bool>, position: &usize) -> (Mat2d<bool>, Mat2d<bool>) {
+    let (left, right) = mat.split_vertical(*position).unwrap();
+    let (_, right) = right.split_vertical(1).unwrap();
+    let right = right.vertical_inverted_copy();
+    (left, right)
+}
+
 fn fold_to_bigger(smaller: Mat2d<bool>, mut bigger: Mat2d<bool>) -> Mat2d<bool> {
     for row in 0..smaller.get_height() {
         for col in 0..smaller.get_width() {
             let t = bigger.get_value(col, row).unwrap() == &true|| smaller.get_value(col, row).unwrap() == &true;
             if t {
-                bigger.set_value(col, row, true);
+                bigger.set_value(col, row, true).expect("");
             }
         }
     }
@@ -140,7 +150,7 @@ mod test{
 
     #[test]
     fn test_day13_1(){
-        let data = fs::read_to_string("resources/day_13_testdata").expect("could not open file");
+        let data = fs::read_to_string("resources/day13_test_data").expect("could not open file");
         let (mat, instructions) = parse_input(&data);
         assert_eq!(mat.get_height(), 15);
         assert_eq!(mat.get_width(), 11);

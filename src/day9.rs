@@ -97,7 +97,7 @@ fn find_basins(mat: &Mat2d<i32>) -> i32 {
 
 fn scan_basin(mat: &Mat2d<i32>, found_map: &mut Mat2d<bool>, x: usize, y: usize, basin: &mut Vec<i32>) {
     if mat.get_value(x, y).unwrap() < &9 && found_map.get_value(x, y).unwrap() == &false {
-        found_map.set_value(x, y, true);
+        found_map.set_value(x, y, true).expect("");
         basin.push(mat.get_value(x, y).unwrap().clone());
         let ix = x as i32;
         let iy = y as i32;
