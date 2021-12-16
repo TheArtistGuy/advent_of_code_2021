@@ -15,7 +15,9 @@ impl<T> Mat2d<T> where T:Clone{
     ///converts a vector of size (width * height) into a Matrix with
     /// width columns and height rows
     pub fn from(vector : Vec<T>, width: usize, height: usize) -> Self{
-        assert_eq!(vector.len(), (width * height ));
+        if vector.len() !=  (width * height ) {
+            panic!("Mat2d::from() - Vector length != width*height");
+        }
         Mat2d{
             vector,
             width,
@@ -143,7 +145,7 @@ impl<T> Mat2d<T> where T:Clone{
     ///         assert_eq!(**s2.get_value(1,1).unwrap(), 2);
     ///
     pub fn split_vertical(&self, position : usize) -> Option<(Mat2d<T>, Mat2d<T>)> {
-        if (position + 1 > self.width) {return None};
+        if position + 1 > self.width {return None};
         let right = self.copy_part(
             position,
             self.width,

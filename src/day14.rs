@@ -5,7 +5,7 @@ use std::path::Path;
 pub(crate) fn day14(){
     let data = fs::read_to_string(Path::new("resources/day14_data")).expect("could not open file");
     println!("Day 14 , 1 : {}",&part1(&data));
-    println!("Day 14 , 2 : {}",&part2(&data));
+    //println!("Day 14 , 2 : {}",&part2(&data));
 }
 
 fn part1(data: &String) -> i64 {
@@ -16,6 +16,8 @@ fn part1(data: &String) -> i64 {
 }
 
 //this is brute forcing, takes a long time.
+//change to compute the instructions, not the polymer,
+//should and 4 times the rule for 10 generations should do.
 fn part2(data: &String) -> i64 {
     let (polymer, instruction_table) = parse_input(&data);
     println!("Step");
