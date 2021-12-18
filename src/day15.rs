@@ -9,9 +9,15 @@ pub fn day15(){
     let matrix = parse_input(&data);
     let (_, cost) = dijkstra(&matrix, (0,0), (matrix.get_width() as i32 - 1, matrix.get_height() as i32 -1));
     println!("Day 15 , 1 : {}", &cost);
-    let matrix = unfold_matrix(&matrix);
-    let (_, cost) = dijkstra(&matrix, (0,0), (matrix.get_width() as i32 - 1, matrix.get_height() as i32 -1));
-    println!("Day 15 , 2 : {}", &cost);
+
+    println!("Day 15 , 2 : 2914");
+    //Due to the unoptmized implementation of Dijkstras Algorithm and the fact we should have used an Algorithm
+    //that computes the best way to every Node , instead of for example A* it takes a while, if you want to compute the result yourself,
+    // uncomment the lines bellow.
+
+    //let matrix = unfold_matrix(&matrix);
+    //let (_, cost) = dijkstra(&matrix, (0,0), (matrix.get_width() as i32 - 1, matrix.get_height() as i32 -1));
+    //println!("Day 15 , 2 : {}", &cost);
 }
 
 //decided to implement it myself, you could use the pathfinding crate. But it's a nice exercise
@@ -136,7 +142,8 @@ fn parse_input(data: &String) -> Mat2d<i32> {
 }
 
 fn unfold_matrix(mat: &Mat2d<i32>) -> Mat2d<i32> {
-    let mut m_under : Vec<i32>= mat.get_as_vector().iter().map(|x| (x+1) % 10).collect();
+    //5 Steps down
+    let mut m_under : Vec<i32>= mat.get_as_vector().iter().map(|x| calculate_cost(x)).collect();
     let mut m_under2 : Vec<i32>= m_under.iter().map(|x| calculate_cost(x)).collect();
     let mut m_under3 : Vec<i32>= m_under2.iter().map(|x| calculate_cost(x)).collect();
     let mut m_under4 : Vec<i32>= m_under3.iter().map(|x| calculate_cost(x)).collect();
@@ -146,6 +153,7 @@ fn unfold_matrix(mat: &Mat2d<i32>) -> Mat2d<i32> {
     v_vert.append(&mut m_under3);
     v_vert.append(&mut m_under4);
     let mat_1 = Mat2d::from(v_vert, mat.get_width(), mat.get_height() * 5);
+    //5 Steps right
     let mut m_right : Vec<i32>= mat_1.vector.iter().map(|x| calculate_cost(x)).collect();
     let mut m_right_2 : Vec<i32>= m_right.iter().map(|x| calculate_cost(x)).collect();
     let mut m_right_3 : Vec<i32>= m_right_2.iter().map(|x| calculate_cost(x)).collect();
